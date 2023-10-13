@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>WP Exam</title>
+</head>
+<body>
+<!-- The form should submit to AlbumsController.create or AlbumsController.update,
+     depending on whether we are creating or editing an album -->
+<form method="post" th:action="@{'/albums/{id}' (id=${albums?.getId()})}">
+    <div>
+        <label for="name">Name</label>
+        <input type="text"
+               id="name"
+               name="name"
+               th:value="${albums?.getName()}"
+               required>
+    </div>
+    <div>
+        <label for="details">Details</label>
+        <input type="text"
+               id="details"
+               name="details"
+               th:value="${albums?.getDetails()}"
+               required>
+    </div>
+    <div>
+        <label for="dateOfPublishing">Date of Publishing</label>
+        <input type="date"
+               id="dateOfPublishing"
+               name="dateOfPublishing"
+               th:value="${albums?.getDateOfPublishing()}"
+               required>
+    </div>
+    <div>
+        <label for="genre">Genre</label><br/>
+        <select id="genre" name="genre" multiple="multiple" size="5">
+            <!-- For each genre you should have one <option> like below  -->
+            <option th:each="genre: ${genres}"
+                    th:text="${genre.name()}"
+                    th:value="${genre}"
+                    th:selected="${albums!=null ? albums.getGenre().equals(genre) : false}"
+                > [genre.name]</option>
+                   <!-- value="[genre]" -->
+        </select>
+    </div>
+    <div>
+        <label>Artist</label><br/>
+        <select id="artist" name="artist" multiple="multiple" size="5">
+            <!-- For each artist you should have one <option> like below  -->
+            <option th:each="artist: ${artists}"
+                    th:value="${artist.getId()}"
+                    th:text="${artist.getName()}"
+                    th:selected="${albums!=null ? albums.getArtist() == (artist) : false}"
+                >[artist.name]</option></option>
+                    <!--  value="[artist.id]"-->
+        </select>
+    </div>
+
+    <button id="submit" type="submit">Submit</button>
+    <a id="back" href="/albums" type="button" class="btn btn-primary">Back to albums</a>
+</form>
+
+<div>
+    <ul id="nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</div>
+
+</body>
+</html>

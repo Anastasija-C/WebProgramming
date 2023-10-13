@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>WP Exam</title>
+</head>
+<body>
+
+<div>
+    <!-- The form below should invoke the method AlbumsController.showAlbums -->
+    <form id="filter-form">
+        <label for="years">Years</label>
+        <input id="years" type="number" name="yearsMoreThan"/>
+        <label for="genre">Genre</label>
+        <select id="genre" name="genre">
+            <option value="">All</option>
+            <!-- For each genre you should have one <option> like below  -->
+            <option th:each="genre: ${genres}"
+                    th:text="${genre.name()}"
+                    th:value="${genre}"> [genre.name]</option>
+        </select>
+        <button id="filter" type="submit">Filter</button>
+    </form>
+    <div>
+        <!-- AlbumsController.showAdd -->
+        <a href="/albums/add" class="add-item" sec:authorize="hasRole('ROLE_ADMIN')">
+            Add new album
+        </a>
+    </div>
+    <table>
+        <tr>
+            <th>Album name</th>
+            <th>Details</th>
+            <th>Date of Publishing</th>
+            <th>Genre</th>
+            <th>Artist</th>
+            <th>Likes</th>
+            <th>Actions</th>
+        </tr>
+        <!-- For each album you should have one <tr> like below -->
+        <tr class="item" th:each="album: ${albums}">
+            <td th:text="${album.getName()}">[album.name]</td>
+            <td th:text="${album.getDetails()}">[album.details]</td>
+            <td th:text="${album.getDateOfPublishing()}">[album.dateOfPublishing]</td>
+            <td th:text="${album.getGenre()}">[album.genre]</td>
+            <td th:text="${album.getArtist()}">[album.artist]</td>
+            <td th:text="${album.getLikes()}">[album.likes]</td>
+            <td>
+                <!-- AlbumsController.delete -->
+                <form method="post" th:action="@{'/albums/{id}/delete' (id=${album.getId()})}"
+                      sec:authorize="hasRole('ROLE_ADMIN')">
+                    <button type="submit" class="delete-item">Delete</button>
+                </form>
+                <!-- AlbumsController.showEdit -->
+                <a class="edit-item" th:href="@{'/albums/{id}/edit' (id=${album.getId()})}"
+                   sec:authorize="hasRole('ROLE_ADMIN')">Edit</a>
+                <!-- AlbumsController.like -->
+                <form method="post" th:action="@{'/albums/{id}/like' (id=${album.getId()})}"
+                      sec:authorize="hasRole('ROLE_USER')">
+                    <button type="submit" class="like-item">Like</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+</div>
+<div>
+    <ul id="nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</div>
+</body>
+</html>
